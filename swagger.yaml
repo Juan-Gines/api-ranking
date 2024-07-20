@@ -1,0 +1,213 @@
+openapi: 3.0.3
+info:
+  title: SaimaPay Test 3
+  description: |-
+    Aquest document és d'ús privat i exclusiu per realitzar la Prova Tècnia i optar a una posició dins lequip tècnic de Saima
+
+  contact:
+    email: dev@saima.info
+  version: 0.1.0
+paths:
+  /ranking:
+    tag:
+      - song
+    get:
+      summary: Get ordered ranking of songs
+      operationId: getRanking
+      parameters:
+        - name: limit
+          in: query
+          description: If is present, to reduce limit, default is 500
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Song'
+        '400':
+          description: Invalid coutnry
+  /ranking/{country}:
+    tag:
+      - song
+    get:
+      summary: Get ordered ranking of songs
+      operationId: getRankingByCountry
+      parameters:
+        - name: country
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: If is present, to reduce limit, default is 500
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Song'
+        '400':
+          description: Invalid coutnry
+  /song:
+    post:
+      summary: Add a new song
+      description: Add a new song
+      operationId: addSong
+      requestBody:
+        description: Create a new song
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Song'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Song'
+        '400':
+          description: Invalid input
+        '422':
+          description: Validation exception
+  /song/{id}:
+    get:
+      summary: Get song info
+      operationId: getSong
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Song'
+        '400':
+          description: Invalid coutnry
+    put:
+      summary: Update song info
+      operationId: updateSong
+      requestBody:
+        description: Update an existent song in the store
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Song'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Song'
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Song not found
+        '422':
+          description: Validation exception
+    delete:
+      summary: Deletes a song
+      operationId: deleteSong
+      parameters:
+        - name: api_key
+          in: header
+          required: true
+          schema:
+            type: string
+        - name: id
+          in: path
+          description: Song id to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+  /song/touch/{id}:
+    get:
+      summary: Adds +1 score to song
+      operationId: touchSong
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Song'
+        '400':
+          description: Invalid coutnry
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiResponse'
+          
+components:
+  schemas:
+    ApiResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        type:
+          type: string
+        message:
+          type: string
+    Song:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+          example: Com està el pati
+        score:
+          type: integer
+          format: int64
+        country:
+          type: string
+        date_added:
+          type: string
+          format: date-time
+        date_modified:
+          type: string
+          format: date-time
+
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: api_key
+      in: header
