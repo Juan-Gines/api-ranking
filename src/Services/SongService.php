@@ -37,7 +37,12 @@ class SongService
     }
   }
 
-  public function getSongs($limit = 10, $country = null)
+  private function saveSongs()
+  {
+    file_put_contents($this->file_path, json_encode($this->songs, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+  }
+
+  public function getSongs($limit, $country = null)
   {
     $songs = $this->songs;
     if ($country) {
@@ -49,5 +54,86 @@ class SongService
       return $b->score <= $a->score;
     });
     return array_slice($songs, 0, $limit);
+  }
+
+  public function addSong($title, $country)
+  {
+    $this->lastId++;
+    $this->lastScore++;
+    $song = new Song($this->lastId, $title, $this->lastScore, $country, date('Y-m-d H:i:s'), date('Y-m-d H:i:s'));
+    array_push($this->songs, $song);
+    $this->saveSongs();
+    return $song;
+  }
+
+  public function getSong($id)
+  {
+    $song = array_filter($this->songs, function ($song) use ($id) {
+      return $song->id == $id;
+    });
+    return array_shift($song);
+  }
+
+  public function updateSong($id, $title, $country)
+  {
+    $song = $this->getSong($id);
+    if (!$song) {
+      return null;
+    }
+    $song->title = $title;
+    $song->country = $country;
+    $song->updateModificationDate();
+    $this->saveSongs();
+    return $song;
+  }
+
+  public function deleteSong($id)
+  {
+    $songToDelete = $this->getSong($id);
+    if (!$songToDelete) {
+      return false;
+    }
+    $this->songs = array_filter($this->songs, function ($song) use ($id) {
+      return $song->id != $id;
+    });
+
+    foreach ($this->songs as $song) {
+      if ($song->score > $songToDelete->score) {
+        $song->score--;
+        $song->updateModificationDate();
+      }
+    }
+
+    $this->saveSongs();
+    return $songToDelete;
+  }
+
+  public function touchSong($id)
+  {
+    $song = $this->getSong($id);
+    if (!$song) {
+      return null;
+    }
+    $score = $song->score;
+    if ($score == 1) {
+      return $song;
+    }
+    $songToSwap = $this->getSongByScore($score - 1);
+    $song->score--;
+    $song->updateModificationDate();
+    if ($songToSwap) {
+      $songToSwap->score++;
+      $songToSwap->updateModificationDate();
+    }
+    $this->saveSongs();
+    return $song;
+  }
+
+  private function getSongByScore($score)
+  {
+    $song = array_filter($this->songs, function ($song) use ($score) {
+      return $song->score == $score;
+    });
+    return array_shift($song);
   }
 }
