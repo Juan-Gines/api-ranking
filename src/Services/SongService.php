@@ -97,12 +97,15 @@ class SongService
       return $song->id != $id;
     });
 
-    foreach ($this->songs as $song) {
+    $this->songs = array_values($this->songs);
+
+    $this->songs = array_map(function ($song) use ($songToDelete) {
       if ($song->score > $songToDelete->score) {
         $song->score--;
         $song->updateModificationDate();
       }
-    }
+      return $song;
+    }, $this->songs);
 
     $this->saveSongs();
     return $songToDelete;
