@@ -3,13 +3,15 @@
 use Slim\Factory\AppFactory;
 use App\Controllers\SongController;
 use App\Services\SongService;
-
+use Selective\BasePath\BasePathMiddleware;
 
 $app = AppFactory::create();
 
 $app->addBodyParsingMiddleware();
 
 $app->addRoutingMiddleware();
+
+$app->add(new BasePathMiddleware($app));
 
 $app->addErrorMiddleware(true, true, true);
 
