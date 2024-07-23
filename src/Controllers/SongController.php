@@ -122,6 +122,6 @@ class SongController
 
   private function validateSong($song)
   {
-    return (isset($song['title']) || isset($song['country'])) && (is_string($song['title']) && is_string($song['country']));
+    return (isset($song['title']) && isset($song['country'])) && (is_string($song['title']) && is_string($song['country']));
   }
 }
