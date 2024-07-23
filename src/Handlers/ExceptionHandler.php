@@ -17,6 +17,8 @@ class ExceptionHandler
       $status = 404;
     } else if ($e instanceof ValidationException) {
       $status = 422;
+    } else if ($e instanceof \InvalidArgumentException) {
+      $status = 400;
     }
     $response->getBody()->write(json_encode([
       'status' => 'error',

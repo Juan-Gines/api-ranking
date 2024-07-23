@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\FileNotFoundException;
+use App\Exceptions\InvalidCountryException;
 use App\Exceptions\JsonDecodeException;
 use App\Exceptions\SongNotFoundException;
 use App\Models\Song;
@@ -57,7 +58,7 @@ class SongService
     }
 
     if (count($songs) === 0) {
-      throw new SongNotFoundException(MessageLoader::getMessage('error.incorrect_country'));
+      throw new \InvalidArgumentException(MessageLoader::getMessage('error.incorrect_country'));
     } else {
       usort($songs, function ($a, $b) {
         return $a->score <=> $b->score;

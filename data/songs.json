@@ -150,5 +150,13 @@
         "country": "Colombia",
         "date_added": "2024-07-20 20:17:27",
         "date_modified": "2024-07-23 03:08:59"
+    },
+    {
+        "id": 20,
+        "title": "La salsita",
+        "score": 20,
+        "country": "Perú",
+        "date_added": "2024-07-23 03:41:43",
+        "date_modified": "2024-07-23 03:41:43"
     }
 ]
