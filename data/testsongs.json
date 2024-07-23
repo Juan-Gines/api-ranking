@@ -1,0 +1,162 @@
+[
+    {
+        "id": 1,
+        "title": "Welcome to the Jungle",
+        "score": 3,
+        "country": "Estados Unidos",
+        "date_added": "2024-01-01 12:00:00",
+        "date_modified": "2024-01-02 12:00:00"
+    },
+    {
+        "id": 2,
+        "title": "Reptilia",
+        "score": 1,
+        "country": "Estados Unidos",
+        "date_added": "2024-01-01 12:00:00",
+        "date_modified": "2024-01-02 12:00:00"
+    },
+    {
+        "id": 3,
+        "title": "Lithium",
+        "score": 2,
+        "country": "Estados Unidos",
+        "date_added": "2024-01-01 12:00:00",
+        "date_modified": "2024-01-02 12:00:00"
+    },
+    {
+        "id": 4,
+        "title": "Smells Like Teen Spirit",
+        "score": 5,
+        "country": "Estados Unidos",
+        "date_added": "2024-01-01 12:00:00",
+        "date_modified": "2024-07-23 05:47:19"
+    },
+    {
+        "id": 5,
+        "title": "Canción actualizada",
+        "score": 4,
+        "country": "Inglaterra",
+        "date_added": "2024-01-01 12:00:00",
+        "date_modified": "2024-07-23 06:15:04"
+    },
+    {
+        "id": 6,
+        "title": "Disintegration",
+        "score": 6,
+        "country": "Inglaterra",
+        "date_added": "2024-01-01 12:00:00",
+        "date_modified": "2024-07-23 05:45:57"
+    },
+    {
+        "id": 7,
+        "title": "Corazón partío",
+        "score": 15,
+        "country": "España",
+        "date_added": "2024-01-01 12:00:00",
+        "date_modified": "2024-01-02 12:00:00"
+    },
+    {
+        "id": 8,
+        "title": "La Flaca",
+        "score": 10,
+        "country": "España",
+        "date_added": "2024-01-01 12:00:00",
+        "date_modified": "2024-01-02 12:00:00"
+    },
+    {
+        "id": 9,
+        "title": "La Camisa Negra",
+        "score": 12,
+        "country": "Colombia",
+        "date_added": "2024-01-01 12:00:00",
+        "date_modified": "2024-01-02 12:00:00"
+    },
+    {
+        "id": 10,
+        "title": "Me Enamora",
+        "score": 11,
+        "country": "Colombia",
+        "date_added": "2024-01-01 12:00:00",
+        "date_modified": "2024-07-20 21:40:14"
+    },
+    {
+        "id": 11,
+        "title": "Ne me quitte pas",
+        "score": 8,
+        "country": "Francia",
+        "date_added": "2024-01-01 12:00:00",
+        "date_modified": "2024-01-02 12:00:00"
+    },
+    {
+        "id": 12,
+        "title": "Je t'aime moi non plus",
+        "score": 9,
+        "country": "Francia",
+        "date_added": "2024-01-01 12:00:00",
+        "date_modified": "2024-01-02 12:00:00"
+    },
+    {
+        "id": 13,
+        "title": "Bella Ciao",
+        "score": 7,
+        "country": "Italia",
+        "date_added": "2024-01-01 12:00:00",
+        "date_modified": "2024-01-02 12:00:00"
+    },
+    {
+        "id": 14,
+        "title": "Volare",
+        "score": 13,
+        "country": "Italia",
+        "date_added": "2024-01-01 12:00:00",
+        "date_modified": "2024-01-02 12:00:00"
+    },
+    {
+        "id": 15,
+        "title": "La Bamba",
+        "score": 14,
+        "country": "Mexico",
+        "date_added": "2024-01-01 12:00:00",
+        "date_modified": "2024-07-20 19:59:03"
+    },
+    {
+        "id": 16,
+        "title": "Cielito Lindo",
+        "score": 17,
+        "country": "Mexico",
+        "date_added": "2024-01-01 12:00:00",
+        "date_modified": "2024-07-23 03:08:59"
+    },
+    {
+        "id": 17,
+        "title": "Me Enamora",
+        "score": 18,
+        "country": "Colombia",
+        "date_added": "2024-07-20 20:17:02",
+        "date_modified": "2024-07-23 03:08:55"
+    },
+    {
+        "id": 18,
+        "title": "Mi carro",
+        "score": 19,
+        "country": "España",
+        "date_added": "2024-07-20 20:17:27",
+        "date_modified": "2024-07-20 21:46:28"
+    },
+    {
+        "id": 19,
+        "title": "Fiera",
+        "score": 16,
+        "country": "Colombia",
+        "date_added": "2024-07-20 20:17:27",
+        "date_modified": "2024-07-23 03:08:59"
+    },
+    {
+        "id": 20,
+        "title": "La salsita",
+        "score": 20,
+        "country": "Perú",
+        "date_added": "2024-07-23 03:41:43",
+        "date_modified": "2024-07-23 06:15:04"
+    }
+]

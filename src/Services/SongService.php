@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Exceptions\FileNotFoundException;
-use App\Exceptions\InvalidCountryException;
 use App\Exceptions\JsonDecodeException;
 use App\Exceptions\SongNotFoundException;
 use App\Models\Song;
@@ -14,10 +13,12 @@ class SongService
   private $songs = [];
   private $lastId = 0;
   private $lastScore = 0;
-  private $file_path = __DIR__ . '/../../data/songs.json';
+  private $file_path;
 
-  public function __construct()
+  public function __construct($file_path = __DIR__ . '/../../data/songs.json')
   {
+    $this->file_path = $file_path;
+
     if (!file_exists($this->file_path)) {
       throw new FileNotFoundException(MessageLoader::getMessage('error.file_not_found'));
     }
