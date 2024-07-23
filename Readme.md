@@ -35,6 +35,16 @@ Bienvenido a la API de Ranking de Canciones. Esta API permite gestionar un ranki
     composer install
     ```
 
+4. Luego para probarlo tienes 2 opciones:
+
+  Utilizando el servidor de desarrollo de PHP
+
+  ```bash
+    composer dev
+   ```
+
+  O simplemente instalandolo en la carpeta de un servidor apache
+
 ## Rutas de la API
 
 ### Obtener el ranking de canciones
