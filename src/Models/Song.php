@@ -21,6 +21,18 @@ class Song
     $this->date_modified = $date_modified;
   }
 
+  public static function fromArray($array)
+  {
+    return new self(
+      $array['id'],
+      $array['title'],
+      $array['score'],
+      $array['country'],
+      $array['date_added'],
+      $array['date_modified']
+    );
+  }
+
   public function updateModificationDate()
   {
     $this->date_modified = date('Y-m-d H:i:s');

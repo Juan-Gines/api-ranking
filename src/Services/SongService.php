@@ -2,7 +2,11 @@
 
 namespace App\Services;
 
+use App\Exceptions\FileNotFoundException;
+use App\Exceptions\JsonDecodeException;
+use App\Exceptions\SongNotFoundException;
 use App\Models\Song;
+use App\Utils\MessageLoader;
 
 class SongService
 {
@@ -13,33 +17,34 @@ class SongService
 
   public function __construct()
   {
-    if (file_exists($this->file_path)) {
-      $songData = json_decode(file_get_contents($this->file_path), true);
-      $this->songs = array_map(function ($song) {
-        return new Song(
-          $song['id'],
-          $song['title'],
-          $song['score'],
-          $song['country'],
-          $song['date_added'],
-          $song['date_modified']
-        );
-      }, $songData);
-      $this->lastId = max(array_column($this->songs, 'id'));
-      $this->lastScore = max(array_column($this->songs, 'score'));
-    } else {
-      $this->songs = [
-        new Song(1, 'Bohemian Rhapsody', 1, 'Inglaterra', '2024-01-01 10:00:00', '2024-01-01 10:00:00'),
-        new Song(2, 'Hotel California', 2, 'Estados Unidos', '2024-01-01 10:00:00', '2024-01-01 10:00:00'),
-      ];
-      $this->lastId = 2;
-      $this->lastScore = 2;
+    if (!file_exists($this->file_path)) {
+      throw new FileNotFoundException(MessageLoader::getMessage('error.file_not_found'));
     }
+    $songData = json_decode(file_get_contents($this->file_path), true);
+
+    if (json_last_error() !== JSON_ERROR_NONE) {
+      throw new JsonDecodeException(MessageLoader::getMessage('error.json_decode_error'));
+    }
+
+    if (count($songData) === 0) {
+      throw new SongNotFoundException(MessageLoader::getMessage('error.song_list_empty'));
+    }
+
+    $this->songs = array_map(function ($song) {
+      return Song::fromArray($song);
+    }, $songData);
+
+    $this->lastId = max(array_column($this->songs, 'id'));
+    $this->lastScore = max(array_column($this->songs, 'score'));
   }
 
   private function saveSongs()
   {
     file_put_contents($this->file_path, json_encode($this->songs, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+    if (json_last_error() !== JSON_ERROR_NONE) {
+      throw new JsonDecodeException(MessageLoader::getMessage('error.json_encode_error'));
+    }
   }
 
   public function getSongs($limit, $country = null)
@@ -50,9 +55,15 @@ class SongService
         return $song->country === $country;
       });
     }
-    usort($songs, function ($a, $b) {
-      return $b->score <= $a->score;
-    });
+
+    if (count($songs) === 0) {
+      throw new SongNotFoundException(MessageLoader::getMessage('error.incorrect_country'));
+    } else {
+      usort($songs, function ($a, $b) {
+        return $a->score <=> $b->score;
+      });
+    }
+
     return array_slice($songs, 0, $limit);
   }
 
@@ -71,15 +82,15 @@ class SongService
     $song = array_filter($this->songs, function ($song) use ($id) {
       return $song->id == $id;
     });
+    if (count($song) === 0) {
+      throw new SongNotFoundException(MessageLoader::getMessage('error.song_not_found'));
+    }
     return array_shift($song);
   }
 
   public function updateSong($id, $title, $country)
   {
     $song = $this->getSong($id);
-    if (!$song) {
-      return null;
-    }
     $song->title = $title;
     $song->country = $country;
     $song->updateModificationDate();
@@ -90,9 +101,6 @@ class SongService
   public function deleteSong($id)
   {
     $songToDelete = $this->getSong($id);
-    if (!$songToDelete) {
-      return false;
-    }
     $this->songs = array_filter($this->songs, function ($song) use ($id) {
       return $song->id != $id;
     });

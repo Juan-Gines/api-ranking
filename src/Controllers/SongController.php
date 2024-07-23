@@ -2,7 +2,11 @@
 
 namespace App\Controllers;
 
+use App\Exceptions\ValidationException;
+use App\Handlers\ExceptionHandler;
+use App\Responses\ApiResponse;
 use App\Services\SongService;
+use App\Utils\MessageLoader;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -17,107 +21,107 @@ class SongController
 
   public function getRanking(Request $request, Response $response, $args)
   {
-    $limit = $request->getQueryParams()['limit'] ?? 500;
-    $songs = $this->songService->getSongs($limit);
-    $response->getBody()->write(json_encode($songs));
-    return $response->withHeader('Content-Type', 'application/json');
-  }
-
-  public function getRankingByCountry(Request $request, Response $response, $args)
-  {
-    $country = ucwords($args['country']);
-    $limit = $request->getQueryParams()['limit'] ?? 10;
-    $songs = $this->songService->getSongs($limit, $country);
-    $response->getBody()->write(json_encode($songs));
-    return $response->withHeader('Content-Type', 'application/json');
+    try {
+      $country = isset($args['country']) ? ucwords($args['country']) : null;
+      $limit = $request->getQueryParams()['limit'] ?? 500;
+      if (!is_numeric($limit)) {
+        throw new ValidationException(MessageLoader::getMessage('validation.invalid_limit'));
+      }
+      $songs = $this->songService->getSongs($limit, $country);
+      return ApiResponse::respondWithJson($response, $songs);
+    } catch (\Exception $e) {
+      return ExceptionHandler::handle($response, $e);
+    }
   }
 
   public function addSong(Request $request, Response $response, $args)
   {
-    $body = $request->getParsedBody();
+    try {
+      $body = $request->getParsedBody();
 
-    if (!$this->validateSong($body)) {
-      $response->getBody()->write(json_encode(['error' => 'Título y país son requeridos']));
-      return $response->withStatus(400)->withHeader('Content-Type', 'application/json');
+      if (!$this->validateSong($body)) {
+        throw new ValidationException(MessageLoader::getMessage('validation.title_country_required'));
+      }
+
+      $title = $body['title'];
+      $country = ucwords($body['country']);
+      $song = $this->songService->addSong($title, $country);
+      return ApiResponse::respondWithJson($response, $song, 201);
+    } catch (\Exception $e) {
+      return ExceptionHandler::handle($response, $e);
     }
-
-    $title = $body['title'];
-    $country = ucwords($body['country']);
-    $song = $this->songService->addSong($title, $country);
-    $response->getBody()->write(json_encode($song));
-    return $response->withHeader('Content-Type', 'application/json');
   }
 
   public function getSong(Request $request, Response $response, $args)
   {
-    $id = $args['id'];
-    $song = $this->songService->getSong($id);
+    try {
+      $id = $args['id'];
+      if (!is_numeric($id)) {
+        throw new ValidationException(MessageLoader::getMessage('validation.invalid_id'));
+      }
+      $song = $this->songService->getSong($id);
 
-    if (!$song) {
-      $response->getBody()->write(json_encode(['error' => 'Canción no encontrada']));
-      return $response->withStatus(404)->withHeader('Content-Type', 'application/json');
+      return ApiResponse::respondWithJson($response, $song);
+    } catch (\Exception $e) {
+      return ExceptionHandler::handle($response, $e);
     }
-
-    $response->getBody()->write(json_encode($song));
-    return $response->withHeader('Content-Type', 'application/json');
   }
 
   public function updateSong(Request $request, Response $response, $args)
   {
-    $id = $args['id'];
-    $body = $request->getParsedBody();
+    try {
+      $id = $args['id'];
+      if (!is_numeric($id)) {
+        throw new ValidationException(MessageLoader::getMessage('validation.invalid_id'));
+      }
+      $body = $request->getParsedBody();
 
-    if (!$this->validateSong($body)) {
-      $response->getBody()->write(json_encode(['error' => 'Título y país son requeridos']));
-      return $response->withStatus(400)->withHeader('Content-Type', 'application/json');
+      if (!$this->validateSong($body)) {
+        throw new ValidationException(MessageLoader::getMessage('validation.title_country_required'));
+      }
+
+      $title = $body['title'];
+      $country = ucwords($body['country']);
+      $song = $this->songService->updateSong($id, $title, $country);
+
+      return ApiResponse::respondWithJson($response, $song);
+    } catch (\Exception $e) {
+      return ExceptionHandler::handle($response, $e);
     }
-
-    $title = $body['title'];
-    $country = ucwords($body['country']);
-    $song = $this->songService->updateSong($id, $title, $country);
-
-    if (!$song) {
-      $response->getBody()->write(json_encode(['error' => 'Canción no encontrada']));
-      return $response->withStatus(404)->withHeader('Content-Type', 'application/json');
-    }
-
-    $response->getBody()->write(json_encode($song));
-    return $response->withHeader('Content-Type', 'application/json');
   }
 
   public function deleteSong(Request $request, Response $response, $args)
   {
-    $id = $args['id'];
-    $song = $this->songService->deleteSong($id);
+    try {
+      $id = $args['id'];
+      if (!is_numeric($id)) {
+        throw new ValidationException(MessageLoader::getMessage('validation.invalid_id'));
+      }
+      $song = $this->songService->deleteSong($id);
 
-    if (!$song) {
-      $response->getBody()->write(json_encode(['error' => 'Canción no encontrada']));
-      return $response->withStatus(404)->withHeader('Content-Type', 'application/json');
+      return ApiResponse::respondWithJson($response, $song);
+    } catch (\Exception $e) {
+      return ExceptionHandler::handle($response, $e);
     }
-
-    $response->getBody()->write(json_encode($song));
-    return $response->withHeader('Content-Type', 'application/json');
   }
 
   public function touchSong(Request $request, Response $response, $args)
   {
-    $id = $args['id'];
-    $song = $this->songService->touchSong($id);
+    try {
+      $id = $args['id'];
+      if (!is_numeric($id)) {
+        throw new ValidationException(MessageLoader::getMessage('validation.invalid_id'));
+      }
+      $song = $this->songService->touchSong($id);
 
-    if (!$song) {
-      $response->getBody()->write(json_encode(['error' => 'Canción no encontrada']));
-      return $response->withStatus(404)->withHeader('Content-Type', 'application/json');
+      return ApiResponse::respondWithJson($response, $song);
+    } catch (\Exception $e) {
+      return ExceptionHandler::handle($response, $e);
     }
-
-    $response->getBody()->write(json_encode($song));
-    return $response->withHeader('Content-Type', 'application/json');
   }
 
   private function validateSong($song)
   {
-    if (!isset($song['title']) || !isset($song['country'])) {
-      return false;
-    }
-    return true;
+    return (isset($song['title']) || isset($song['country'])) && (is_string($song['title']) && is_string($song['country']));
   }
 }

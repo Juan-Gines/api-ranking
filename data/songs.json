@@ -122,25 +122,33 @@
     {
         "id": 16,
         "title": "Cielito Lindo",
-        "score": 16,
+        "score": 17,
         "country": "Mexico",
         "date_added": "2024-01-01 12:00:00",
-        "date_modified": "2024-01-02 12:00:00"
+        "date_modified": "2024-07-23 03:08:59"
     },
     {
         "id": 17,
-        "title": "La Bamba2",
-        "score": 17,
-        "country": "Mexico",
+        "title": "Me Enamora",
+        "score": 18,
+        "country": "Colombia",
         "date_added": "2024-07-20 20:17:02",
-        "date_modified": "2024-07-20 20:17:02"
+        "date_modified": "2024-07-23 03:08:55"
     },
     {
-        "id": 19,
-        "title": "La eterna canción",
-        "score": 18,
+        "id": 18,
+        "title": "Mi carro",
+        "score": 19,
         "country": "España",
         "date_added": "2024-07-20 20:17:27",
         "date_modified": "2024-07-20 21:46:28"
+    },
+    {
+        "id": 19,
+        "title": "Fiera",
+        "score": 16,
+        "country": "Colombia",
+        "date_added": "2024-07-20 20:17:27",
+        "date_modified": "2024-07-23 03:08:59"
     }
 ]
